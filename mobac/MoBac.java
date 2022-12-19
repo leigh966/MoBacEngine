@@ -16,13 +16,6 @@ public class MoBac
         IMoBacPlugin object1 =
                 (IMoBacPlugin) myObjectClass.newInstance();
 
-
-        //create new class loader so classes can be reloaded.
-        classLoader = new MyClassLoader(parentClassLoader);
-        myObjectClass = classLoader.loadClass("data.Default");
-
-        object1 = (IMoBacPlugin) myObjectClass.newInstance();
-
         object1.Run();
 
     }
