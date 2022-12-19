@@ -1,3 +1,7 @@
+package mobac;
+
+import mobac.MyClassLoader;
+
 public class MoBac
 {
     public static void main(String[] args) throws
@@ -7,20 +11,19 @@ public class MoBac
 
         ClassLoader parentClassLoader = MyClassLoader.class.getClassLoader();
         MyClassLoader classLoader = new MyClassLoader(parentClassLoader);
-        Class myObjectClass = classLoader.loadClass("reflection.MyObject");
+        Class myObjectClass = classLoader.loadClass("data.Default");
 
-        AnInterface2       object1 =
-                (AnInterface2) myObjectClass.newInstance();
+        IMoBacPlugin object1 =
+                (IMoBacPlugin) myObjectClass.newInstance();
 
-        MyObjectSuperClass object2 =
-                (MyObjectSuperClass) myObjectClass.newInstance();
 
         //create new class loader so classes can be reloaded.
         classLoader = new MyClassLoader(parentClassLoader);
-        myObjectClass = classLoader.loadClass("reflection.MyObject");
+        myObjectClass = classLoader.loadClass("data.Default");
 
-        object1 = (AnInterface2)       myObjectClass.newInstance();
-        object2 = (MyObjectSuperClass) myObjectClass.newInstance();
+        object1 = (IMoBacPlugin) myObjectClass.newInstance();
+
+        object1.Run();
 
     }
 }

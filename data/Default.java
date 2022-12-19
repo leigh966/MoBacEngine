@@ -1,11 +1,15 @@
 package data;
-
 import data.libs.Map;
 
 import javax.swing.*;
 
-public class Default {
-    public static void main(String[] args) {
+import mobac.IMoBacPlugin;
+import mobac.MoBacPlugin;
+
+public class Default extends MoBacPlugin implements IMoBacPlugin {
+
+    public void Run()
+    {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
