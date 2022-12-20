@@ -2,6 +2,11 @@ package mobac;
 
 import mobac.MyClassLoader;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class MoBac
 {
     private static ClassLoader parentClassLoader;
@@ -40,11 +45,29 @@ public class MoBac
         }
     }
 
+    public static void loadPlugins()
+    {
+        try {
+            String path = String.format("mobac/load_order.txt");
+            File myObj = new File(path);
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                tryLoadPlugin(data);
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File Not Found!");
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
 
         parentClassLoader = MyClassLoader.class.getClassLoader();
         classLoader = new MyClassLoader(parentClassLoader);
-        tryLoadPlugin("Default");
+
+        loadPlugins();
 
     }
 }
