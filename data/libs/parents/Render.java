@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import static data.libs.ConfigReader.readConfig;
+
 public abstract class Render extends JFrame {
     protected List<Float[]> lines;
 
@@ -22,7 +24,7 @@ public abstract class Render extends JFrame {
     {
         super(windowName);
         configValues = new HashMap<String, String>();
-        readConfig();
+        configValues = readConfig("rendering");
         setShowFps();
     }
 
@@ -39,22 +41,6 @@ public abstract class Render extends JFrame {
         }
     }
 
-    private void readConfig()
-    {
-        try {
-            String path = "data/rendering.config";
-            File myObj = new File(path);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String[] data = myReader.nextLine().split("=");
-                configValues.put(data[0], data[1]);
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("File Not Found!");
-            e.printStackTrace();
-        }
-    }
 
     protected Player player;
     protected void loadLevel(String levelName) // maybe have error checking and return bool to signify whether all was okay
@@ -105,6 +91,11 @@ public abstract class Render extends JFrame {
         super.paint(g);
     }
 
+
+    public Player getPlayer()
+    {
+        return player;
+    }
 
     public abstract void drawPlayer(Graphics2D g2d);
 
