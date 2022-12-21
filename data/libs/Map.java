@@ -43,7 +43,6 @@ public class Map extends Render {
         for(Float[] line : lines)
         {
             g2d.draw(new Line2D.Double(line[0], line[1], line[0]+line[2], line[1]+line[3]));
-            System.out.println(String.format("%s %s %s %s", line[0], line[1], line[0]+line[2], line[1]+line[3]));
         }
 
     }
@@ -75,5 +74,7 @@ public class Map extends Render {
 
         repaint();
     }
+
+
 
 }
