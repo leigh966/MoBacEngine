@@ -59,15 +59,16 @@ public class Map extends Render {
     public void drawPlayer(Graphics2D g2d)
     {
         float[] pos = player.getPosition();
-        g2d.drawOval(Math.round(pos[0]), Math.round(pos[1]), 1, 1);
+        float[] facing = player.getFacingVector();
+        g2d.drawLine(Math.round(pos[0]), Math.round(pos[1]), Math.round(pos[0]+facing[0]*5), Math.round(pos[1]+facing[1]*5));
     }
 
     public void paint(Graphics g) {
-        BufferedImage bufferedImage = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bufferedImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = bufferedImage.createGraphics();
         g2d.setColor(Color.white);
         g2d.setBackground(Color.white);
-        g2d.clearRect(0, 0,500, 500);
+        g2d.clearRect(0, 0,this.getWidth(), this.getHeight());
         draw(g2d);
         Graphics2D g2dComponent = (Graphics2D) g;
         g2dComponent.drawImage(bufferedImage, null, 0, 0);

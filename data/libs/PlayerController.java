@@ -28,17 +28,25 @@ public class PlayerController {
                 {
                     move(new float[]{0,1});
                 }
-                if(isKeyFor(key,"back"))
+                else if(isKeyFor(key,"back"))
                 {
                     move(new float[]{0,-1});
                 }
-                if(isKeyFor(key,"right"))
+                else if(isKeyFor(key,"right"))
                 {
                     move(new float[]{1,0});
                 }
-                if(isKeyFor(key,"left"))
+                else if(isKeyFor(key,"left"))
                 {
                     move(new float[]{-1,0});
+                }
+                else if(isKeyFor(key, "clockwise"))
+                {
+                    rotate(1);
+                }
+                else if(isKeyFor(key, "anticlockwise"))
+                {
+                    rotate(-1);
                 }
                 else
                 {
