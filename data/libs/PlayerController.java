@@ -10,14 +10,24 @@ import static data.libs.ConfigReader.readConfig;
 public class PlayerController {
     protected Player player;
     protected HashMap<String, String> configValues;
-    public float movementSpeed;
+    public static float movementSpeed = 0.01f;
+    public static float rotationSpeed;
     String keysDown = "";
 
     public PlayerController(Player playerToControl, JFrame frame)
     {
         player = playerToControl;
         configValues = readConfig("controls");
-        movementSpeed = 0.01f;
+        try {
+            String readSensitivity = configValues.get("sensitivity");
+            if(readSensitivity==null) throw new NumberFormatException("sensitivity not set in config");
+            Float readRotationSpeed = Float.parseFloat(readSensitivity);
+            rotationSpeed = readRotationSpeed;
+        } catch(NumberFormatException nfe)
+        {
+            System.out.println("Failed to read sensitivity from config! Defaulting to 0.2f.");
+            rotationSpeed = 0.2f;
+        }
         frame.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -83,11 +93,11 @@ public class PlayerController {
             }
             else if(isKeyFor(key, "clockwise"))
             {
-                rotate(1);
+                rotate(rotationSpeed);
             }
             else if(isKeyFor(key, "anticlockwise"))
             {
-                rotate(-1);
+                rotate(-rotationSpeed);
             }
             else
             {
