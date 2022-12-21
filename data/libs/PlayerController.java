@@ -24,10 +24,21 @@ public class PlayerController {
             @Override
             public void keyPressed(KeyEvent e) {
                 char key = e.getKeyChar();
-                if(key == configValues.get("forward").charAt(0))
+                if(isKeyFor(key,"forward"))
                 {
                     move(new float[]{0,1});
-                    System.out.println("moving");
+                }
+                if(isKeyFor(key,"back"))
+                {
+                    move(new float[]{0,-1});
+                }
+                if(isKeyFor(key,"right"))
+                {
+                    move(new float[]{1,0});
+                }
+                if(isKeyFor(key,"left"))
+                {
+                    move(new float[]{-1,0});
                 }
                 else
                 {
@@ -39,6 +50,11 @@ public class PlayerController {
             public void keyReleased(KeyEvent e) {
             }
         });
+    }
+
+    private boolean isKeyFor(char key, String action)
+    {
+        return key == configValues.get(action).charAt(0);
     }
 
     public void rotate(float angle)
