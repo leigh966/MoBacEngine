@@ -18,6 +18,7 @@ public class Default extends MoBacPlugin implements IMoBacPlugin {
                 Map map = new Map("level1");
                 map.setVisible(true);
                 PlayerController pc = new PlayerController(map.getPlayer(), map);
+                map.addPerFrameAction(()->pc.tick());
             }
         });
     }

@@ -11,11 +11,13 @@ public class PlayerController {
     protected Player player;
     protected HashMap<String, String> configValues;
     public float movementSpeed;
+    String keysDown = "";
+
     public PlayerController(Player playerToControl, JFrame frame)
     {
         player = playerToControl;
         configValues = readConfig("controls");
-        movementSpeed = 1.0f;
+        movementSpeed = 0.01f;
         frame.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -24,38 +26,16 @@ public class PlayerController {
             @Override
             public void keyPressed(KeyEvent e) {
                 char key = e.getKeyChar();
-                if(isKeyFor(key,"forward"))
-                {
-                    move(new float[]{0,1});
-                }
-                else if(isKeyFor(key,"back"))
-                {
-                    move(new float[]{0,-1});
-                }
-                else if(isKeyFor(key,"right"))
-                {
-                    move(new float[]{1,0});
-                }
-                else if(isKeyFor(key,"left"))
-                {
-                    move(new float[]{-1,0});
-                }
-                else if(isKeyFor(key, "clockwise"))
-                {
-                    rotate(1);
-                }
-                else if(isKeyFor(key, "anticlockwise"))
-                {
-                    rotate(-1);
-                }
-                else
-                {
-                    System.out.println("pressing "+key);
-                }
+                if(keysDown.contains(""+key)) return;
+                keysDown += key;
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
+                String[] keysSplit = keysDown.split(""+e.getKeyChar());
+                if(keysSplit.length == 0) keysDown = "";
+                else if(keysSplit.length == 2) keysDown = keysSplit[0]+keysSplit[1];
+                else keysDown = keysSplit[0];
             }
         });
     }
@@ -80,6 +60,41 @@ public class PlayerController {
         player.transform(newVector[0], newVector[1]);
     }
 
+    public void tick()
+    {
+        for(int i = 0; i < keysDown.length(); i++)
+        {
+            char key = keysDown.charAt(i);
+            if(isKeyFor(key,"forward"))
+            {
+                move(new float[]{0,1});
+            }
+            else if(isKeyFor(key,"back"))
+            {
+                move(new float[]{0,-1});
+            }
+            else if(isKeyFor(key,"right"))
+            {
+                move(new float[]{1,0});
+            }
+            else if(isKeyFor(key,"left"))
+            {
+                move(new float[]{-1,0});
+            }
+            else if(isKeyFor(key, "clockwise"))
+            {
+                rotate(1);
+            }
+            else if(isKeyFor(key, "anticlockwise"))
+            {
+                rotate(-1);
+            }
+            else
+            {
+                System.out.println("pressing "+key);
+            }
+        }
 
+    }
 
 }
