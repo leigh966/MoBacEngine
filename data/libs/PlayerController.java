@@ -10,7 +10,7 @@ import static data.libs.ConfigReader.readConfig;
 public class PlayerController {
     protected Player player;
     protected HashMap<String, String> configValues;
-    public static float movementSpeed = 0.01f;
+    public static float movementSpeed = 0.1f;
     public static float rotationSpeed;
     String keysDown = "";
 

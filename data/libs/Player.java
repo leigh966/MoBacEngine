@@ -14,7 +14,7 @@ public class Player
 
     public float[] getPosition()
     {
-        return position;
+        return position.clone();
     }
 
     public void setPosition(float x, float y)
