@@ -4,6 +4,7 @@ import data.libs.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -20,13 +21,35 @@ public abstract class Render extends JFrame {
 
     List<Runnable> actions;
 
-    public Render(String windowName)
+    public Render(String windowName, String levelName)
     {
         super(windowName);
         actions = new LinkedList<>();
         configValues = new HashMap<String, String>();
         configValues = readConfig("rendering");
+        lines = new LinkedList<Float[]>();
         setShowFps();
+        setupWindowSize();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        loadLevel(levelName);
+    }
+
+    private void setupWindowSize()
+    {
+        int[] windowSize = new int[2];
+        try
+        {
+            windowSize[0] = Integer.parseInt(configValues.get("width"));
+            windowSize[1] = Integer.parseInt(configValues.get("height"));
+        }
+        catch(NumberFormatException nfe)
+        {
+            System.out.println("Config values for window size are not interpretable as numbers! Defaulting to 720p.");
+            windowSize[0] = 1280;
+            windowSize[1] = 720;
+        }
+        setSize(windowSize[0], windowSize[1]);
     }
 
     private void setShowFps()
@@ -70,6 +93,7 @@ public abstract class Render extends JFrame {
     double framerate;
     private void drawFps(Graphics2D g2d)
     {
+        g2d.setColor(Color.BLACK);
         if(System.currentTimeMillis() - lastFpsUpdate > 1000L) { // update the counter every sec
             framerate = 1.0d / (((double) elapsedTime) / 1000.0d);
             lastFpsUpdate = System.currentTimeMillis();
@@ -92,9 +116,6 @@ public abstract class Render extends JFrame {
 
     long elapsedTime;
     long frameStart = System.currentTimeMillis();
-    public void paint(Graphics g) {
-        super.paint(g);
-    }
 
 
     public Player getPlayer()
@@ -102,11 +123,23 @@ public abstract class Render extends JFrame {
         return player;
     }
 
+    public void paint(Graphics g)
+    {
+        BufferedImage bufferedImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = bufferedImage.createGraphics();
+        g2d.setColor(Color.white);
+        g2d.setBackground(Color.white);
+        g2d.clearRect(0, 0,this.getWidth(), this.getHeight());
+        draw(g2d);
+        Graphics2D g2dComponent = (Graphics2D) g;
+        g2dComponent.drawImage(bufferedImage, null, 0, 0);
+
+        repaint();
+    }
+
     public void addPerFrameAction(Runnable r)
     {
         actions.add(r);
     }
-
-    public abstract void drawPlayer(Graphics2D g2d);
 
 }
