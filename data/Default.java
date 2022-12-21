@@ -10,6 +10,7 @@ public class Default extends MoBacPlugin implements IMoBacPlugin {
 
     public void Run()
     {
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

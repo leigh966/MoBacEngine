@@ -1,9 +1,10 @@
 package data.libs;
 
 import data.libs.parents.Render;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+
+import java.awt.*;
 import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import javax.swing.JFrame;
 
@@ -14,7 +15,6 @@ public class Map extends Render {
 
     public Map(String levelName) {
         super("Lines Drawing Demo");
-
         lines = new LinkedList<Float[]>();
         int[] windowSize = new int[2];
         try
@@ -37,8 +37,8 @@ public class Map extends Render {
 
 
 
-    void drawLines(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
+    void drawLines(Graphics2D g2d) {
+
         // x y lx ly
         for(Float[] line : lines)
         {
@@ -48,9 +48,24 @@ public class Map extends Render {
 
     }
 
+    protected void draw(Graphics2D g2d)
+    {
+        g2d.setColor(Color.BLACK);
+        super.draw(g2d);
+        drawLines(g2d);
+    }
+
     public void paint(Graphics g) {
-        super.paint(g);
-        drawLines(g);
+        BufferedImage bufferedImage = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = bufferedImage.createGraphics();
+        g2d.setColor(Color.white);
+        g2d.setBackground(Color.white);
+        g2d.clearRect(0, 0,500, 500);
+        draw(g2d);
+        Graphics2D g2dComponent = (Graphics2D) g;
+        g2dComponent.drawImage(bufferedImage, null, 0, 0);
+
+        repaint();
     }
 
 }

@@ -13,12 +13,28 @@ public class Render extends JFrame {
     protected List<Float[]> lines;
 
     protected HashMap<String, String> configValues;
+    public boolean showFps;
+    protected JPanel panel;
 
     public Render(String windowName)
     {
         super(windowName);
         configValues = new HashMap<String, String>();
         readConfig();
+        setShowFps();
+    }
+
+    private void setShowFps()
+    {
+        try
+        {
+            int fpsEnabled = Integer.parseInt(configValues.get("fpscounter"));
+            showFps = fpsEnabled > 0;
+        }
+        catch(NumberFormatException nfe)
+        {
+            System.out.println("Could not read fpsCounter enabled value from rendering.config! Defaulting to 0 (disabled).");
+        }
     }
 
     private void readConfig()
@@ -54,5 +70,34 @@ public class Render extends JFrame {
             e.printStackTrace();
         }
     }
+
+    long lastFpsUpdate = System.currentTimeMillis();
+    double framerate;
+    private void drawFps(Graphics2D g2d)
+    {
+        if(System.currentTimeMillis() - lastFpsUpdate > 1000L) { // update the counter every sec
+            framerate = 1.0d / (((double) elapsedTime) / 1000.0d);
+            lastFpsUpdate = System.currentTimeMillis();
+        }
+        g2d.drawString(String.format("%,.2f", framerate), 20, 50);
+    }
+
+
+    protected void draw(Graphics2D g2d)
+    {
+        g2d.setBackground(Color.white);
+        elapsedTime = System.currentTimeMillis() - frameStart;
+        frameStart = System.currentTimeMillis();
+        if(showFps) drawFps(g2d);
+    }
+
+    long elapsedTime;
+    long frameStart = System.currentTimeMillis();
+    public void paint(Graphics g) {
+        super.paint(g);
+    }
+
+
+
 
 }
