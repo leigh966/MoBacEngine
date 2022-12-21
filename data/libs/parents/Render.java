@@ -1,5 +1,7 @@
 package data.libs.parents;
 
+import data.libs.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -9,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-public class Render extends JFrame {
+public abstract class Render extends JFrame {
     protected List<Float[]> lines;
 
     protected HashMap<String, String> configValues;
@@ -54,6 +56,7 @@ public class Render extends JFrame {
         }
     }
 
+    protected Player player;
     protected void loadLevel(String levelName) // maybe have error checking and return bool to signify whether all was okay
     {
         try {
@@ -61,14 +64,19 @@ public class Render extends JFrame {
             File myObj = new File(path);
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                lines.add(Arrays.stream(data.split(" ")).map(Float::valueOf).toArray(Float[]::new));
+                String[] data = myReader.nextLine().split(" ");
+                String name = data[0];
+                Float[] newData = Arrays.stream(Arrays.copyOfRange(data, 1, data.length)).map(Float::valueOf).toArray(Float[]::new);
+                if(name.equals("line")) lines.add(newData);
+                else if(name.equals("player")) player = new Player(newData[0], newData[1], newData[2]);
+
             }
             myReader.close();
         } catch (FileNotFoundException e) {
             System.out.println("File Not Found!");
             e.printStackTrace();
         }
+        if(player==null) System.out.println("No player in scene!");
     }
 
     long lastFpsUpdate = System.currentTimeMillis();
@@ -98,6 +106,6 @@ public class Render extends JFrame {
     }
 
 
-
+    public abstract void drawPlayer(Graphics2D g2d);
 
 }

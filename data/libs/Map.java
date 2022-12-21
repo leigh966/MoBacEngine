@@ -52,7 +52,15 @@ public class Map extends Render {
     {
         g2d.setColor(Color.BLACK);
         super.draw(g2d);
+        if(player!=null) drawPlayer(g2d);
         drawLines(g2d);
+    }
+
+    @Override
+    public void drawPlayer(Graphics2D g2d)
+    {
+        float[] pos = player.getPosition();
+        g2d.drawOval(Math.round(pos[0]), Math.round(pos[1]), 1, 1);
     }
 
     public void paint(Graphics g) {
