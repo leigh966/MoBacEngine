@@ -6,10 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
 
 import static data.libs.ConfigReader.readConfig;
 
@@ -20,9 +18,12 @@ public abstract class Render extends JFrame {
     public boolean showFps;
     protected JPanel panel;
 
+    List<Runnable> actions;
+
     public Render(String windowName)
     {
         super(windowName);
+        actions = new LinkedList<>();
         configValues = new HashMap<String, String>();
         configValues = readConfig("rendering");
         setShowFps();
@@ -79,6 +80,10 @@ public abstract class Render extends JFrame {
 
     protected void draw(Graphics2D g2d)
     {
+        for(Runnable r : actions)
+        {
+            r.run();
+        }
         g2d.setBackground(Color.white);
         elapsedTime = System.currentTimeMillis() - frameStart;
         frameStart = System.currentTimeMillis();
@@ -95,6 +100,11 @@ public abstract class Render extends JFrame {
     public Player getPlayer()
     {
         return player;
+    }
+
+    public void addPerFrameAction(Runnable r)
+    {
+        actions.add(r);
     }
 
     public abstract void drawPlayer(Graphics2D g2d);
