@@ -19,7 +19,10 @@ public class CollisionResolution {
             {
                 float[] intersection = col.getIntersection();
                 float[] toPlayer = new float[] {playerPos[0]-intersection[0], playerPos[1]-intersection[1]};
-                player.transform(toPlayer[0], toPlayer[1]);
+                float[] normalised = MoMath.normalize(toPlayer[0], toPlayer[1]);
+                float currentDistance = MoMath.pythagorasTheorem(toPlayer[0], toPlayer[1]);
+                float deltaDistance = PLAYER_RADIUS-currentDistance;
+                player.transform(normalised[0]*deltaDistance, normalised[1]*deltaDistance);
             }
         }
     }

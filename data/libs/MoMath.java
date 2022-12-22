@@ -35,7 +35,7 @@ public class MoMath {
 
     public static float[] normalize(float x, float y, float size)
     {
-        return new float[] {x/size, x/size};
+        return new float[] {x/size, y/size};
     }
 
 }
