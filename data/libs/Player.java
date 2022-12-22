@@ -34,7 +34,8 @@ public class Player
         double rotationInRadians = Math.toRadians(rotation);
         double x = Math.sin(rotationInRadians);
         double y = -Math.cos(rotationInRadians);
-        return new float[] {(float)x,(float)y};
+        return new float[] {(float)x,(float)y}; // Used in rendering so needs to not incur rounding issues
+                                                //  associated with normalisation. Hence: no normalisation.
     }
 
     public float[] getRightVector()
