@@ -3,7 +3,7 @@ import data.libs.*;
 
 import javax.swing.*;
 
-import data.libs.parents.Render;
+import data.libs.abstract_classes.Render;
 import mobac.IMoBacPlugin;
 import mobac.MoBacPlugin;
 

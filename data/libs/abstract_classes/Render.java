@@ -1,4 +1,4 @@
-package data.libs.parents;
+package data.libs.abstract_classes;
 
 import data.libs.Player;
 

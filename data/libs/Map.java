@@ -1,12 +1,9 @@
 package data.libs;
 
-import data.libs.parents.Render;
+import data.libs.abstract_classes.Render;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
-import java.awt.image.BufferedImage;
-import java.util.LinkedList;
-import javax.swing.JFrame;
 
 
 public class Map extends Render {

@@ -1,6 +1,6 @@
 package data.libs;
 
-import data.libs.parents.Render;
+import data.libs.abstract_classes.Render;
 
 import java.awt.*;
 
