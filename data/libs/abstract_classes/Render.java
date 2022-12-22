@@ -12,21 +12,29 @@ import java.util.List;
 
 import static data.libs.ConfigReader.readConfig;
 
+
+/** Abstract class to build rendering classes such as {@link data.libs.Map Map} and {@link data.libs.False3D False3D}
+ * @author Leigh Hurley (ItsTheNikolai)
+ */
 public abstract class Render extends JFrame {
     protected List<Float[]> lines;
 
     protected HashMap<String, String> configValues;
+
+    /** Boolean value representing whether the render should draw a fps counter **/
     public boolean showFps;
+
+
     protected JPanel panel;
 
     List<Runnable> actions;
 
-    public List<Float[]> getLines()
-    {
-        return new LinkedList<>(lines);
-    }
 
-
+    /**
+     *
+     * @param windowName The name that the window should display in its top bar
+     * @param levelName The name of the level such that levels/{levelName}.modat is a readable file of level data
+     */
     public Render(String windowName, String levelName)
     {
         super(windowName);
@@ -41,6 +49,17 @@ public abstract class Render extends JFrame {
         loadLevel(levelName);
     }
 
+    /** Get a copy of the list of lines (representing walls) that have been read in from the level data
+     * @return List of line data in the level
+     */
+    public List<Float[]> getLines()
+    {
+        return new LinkedList<>(lines);
+    }
+
+    /** Attempts to read the window size from the read config data and set the window size accordingly. If this fails,
+     *  it will default to 720p
+     */
     private void setupWindowSize()
     {
         int[] windowSize = new int[2];
@@ -58,6 +77,9 @@ public abstract class Render extends JFrame {
         setSize(windowSize[0], windowSize[1]);
     }
 
+    /** Attempts to read whether to show an fps counter from the read config data and set {@code showFps} accordingly.
+     *  If this fails, it will default to false (disabled)
+     */
     private void setShowFps()
     {
         try
@@ -67,12 +89,18 @@ public abstract class Render extends JFrame {
         }
         catch(NumberFormatException nfe)
         {
-            System.out.println("Could not read fpsCounter enabled value from rendering.config! Defaulting to 0 (disabled).");
+            System.out.println("Could not read fpsCounter value from rendering.config! Defaulting to 0 (disabled).");
+            showFps = false;
         }
     }
 
 
     protected Player player;
+
+    /** Read in the lines and Player from the level data (.modat) file
+     *
+     * @param levelName The name of the level such that levels/{levelName}.modat is a readable file of level data
+     */
     protected void loadLevel(String levelName) // maybe have error checking and return bool to signify whether all was okay
     {
         try {
@@ -95,24 +123,41 @@ public abstract class Render extends JFrame {
         if(player==null) System.out.println("No player in scene!");
     }
 
-    long lastFpsUpdate = System.currentTimeMillis();
-    double framerate;
+    private long lastFpsUpdate = System.currentTimeMillis();
+    private double frameRate;
+
+    /** Draw the fps counter in the top left of the screen. Update its value if it has been >1 second since it was last updated
+     *
+     * @param g2d The 2d graphics object to draw onto
+     */
     private void drawFps(Graphics2D g2d)
     {
         g2d.setColor(Color.BLACK);
         if(System.currentTimeMillis() - lastFpsUpdate > 1000L) { // update the counter every sec
-            framerate = 1.0d / (((double) elapsedTime) / 1000.0d);
+            frameRate = 1.0d / (((double) elapsedTime) / 1000.0d);
             lastFpsUpdate = System.currentTimeMillis();
         }
-        g2d.drawString(String.format("%,.2f", framerate), 20, 50);
+        g2d.drawString(String.format("%,.2f", frameRate), 20, 50);
     }
 
-    List<Integer[]> ovals = new LinkedList<>();
+    private List<Integer[]> ovals = new LinkedList<>();
+
+    /** Adds an oval to the list of ovals so that it will be drawn every frame
+     *
+     * @param x The x coordinate to draw the new oval at on screen
+     * @param y The y coordinate to draw the new oval at on screen
+     * @param w The width to draw the oval
+     * @param h The height to draw the oval
+     */
     public void drawOval(int x, int y, int w, int h)
     {
         ovals.add(new Integer[]{x,y,w,h});
     }
 
+    /** Draw all the ovals in the ovals list. Called every frame by Render.draw
+     *
+     * @param g2d The 2d graphics object to draw onto
+     */
     protected void drawOvals(Graphics2D g2d)
     {
         for(Integer[] oval : ovals)
@@ -121,6 +166,10 @@ public abstract class Render extends JFrame {
         }
     }
 
+    /** Draw the background, any ovals and the fpsCounter. Called every frame by paint and, if overridden, should be
+     * called by the overriding method
+     * @param g2d The 2d graphics object to draw onto
+     */
     protected void draw(Graphics2D g2d)
     {
         for(Runnable r : actions)
@@ -134,15 +183,24 @@ public abstract class Render extends JFrame {
         if(showFps) drawFps(g2d);
     }
 
-    long elapsedTime;
-    long frameStart = System.currentTimeMillis();
+    /** The time taken to render the last frame **/
+    private long elapsedTime;
 
+    private long frameStart = System.currentTimeMillis();
 
+    /** Get the player object held by this Render (read in from level data)
+     *
+     * @return The controllable Player object in the scene
+     */
     public Player getPlayer()
     {
         return player;
     }
 
+    /** Refresh Method - calls itself repeatedly to act as a game loop. Called automatically on creation of a Render object
+     *
+     * @param g Graphics object passed in by the automated call
+     */
     public void paint(Graphics g)
     {
         BufferedImage bufferedImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -157,6 +215,10 @@ public abstract class Render extends JFrame {
         repaint();
     }
 
+    /** Add an action to be run every frame
+     *
+     * @param r A runnable object that should have its Run() method called every frame
+     */
     public void addPerFrameAction(Runnable r)
     {
         actions.add(r);
