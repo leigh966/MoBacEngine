@@ -53,7 +53,8 @@ public class Collision2D
         float d1 = MoMath.calculatePointDistance(pointX, pointY, lineX1, lineY1);
         float d2 = MoMath.calculatePointDistance(pointX, pointY, lineX2, lineY2);
         final float BUFFER = 0.1f; // floats aren't accurate so check within this distance
-        if(d1+d2>=lineLen-BUFFER && d1+d2<=lineLen+BUFFER)
+        float min = lineLen-BUFFER, max = lineLen+BUFFER;
+        if(d1+d2>=min && d1+d2<=max)
         {
             float[] vector = new float[]{(lineX2-lineX1)/lineLen, (lineY2-lineY1)/lineLen};
             return new Collision2D(true, vector[0]*d1, vector[1]*d1);
@@ -71,9 +72,9 @@ public class Collision2D
         Collision2D onSegmentCollision = LinePoint(closestX,closestY,lineX1,lineY1,lineX2,lineY2);
         boolean onSegment = onSegmentCollision.getCollisionOccurred();
         if (!onSegment) return onSegmentCollision;
-        float distX = closestX - circleX;
-        float distY = closestY - circleY;
-        float squareDistance = (distX*distX) + (distY*distY);
+
+        float squareDistance = MoMath.calculatePointDistanceSquared(closestX, closestY, circleX, circleY);
+
         if(squareDistance <= circleRadius*circleRadius)
         {
             return new Collision2D(true, closestX, closestY);
