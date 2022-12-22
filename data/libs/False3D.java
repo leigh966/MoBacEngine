@@ -7,7 +7,7 @@ import java.awt.*;
 public class False3D extends Render {
 
     int fov;
-    float viewDistance = 100000f;
+    float viewDistance = 200f;
     public False3D(String levelName)
     {
         super("First Person Mode", levelName);
@@ -106,7 +106,7 @@ public class False3D extends Render {
             float squareDistance = calculateSquareDistance(i, drawColor);
             g2d.setColor(drawColor[0]);
             double distance = Math.sqrt(squareDistance);
-            double size = (9d/10d)*getHeight()-distance;
+            double size = getHeight()/distance;
             int mid = getHeight()/2;
             g2d.drawLine(i, mid-(int)size/2, i, mid+(int)size/2);
         }
