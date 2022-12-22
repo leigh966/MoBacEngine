@@ -49,20 +49,7 @@ public class False3D extends Render {
         return line;
     }
 
-    private float[] getCollisionPoint(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
-        // calculate the distance to intersection point
-        float denominator = ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
-        float uA = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denominator;
-        float uB = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator;
 
-        // if uA and uB are between 0-1, lines are colliding
-        if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
-            float intersectionX = x1 + (uA * (x2-x1));
-            float intersectionY = y1 + (uA * (y2-y1));
-            return new float[]{intersectionX, intersectionY};
-        }
-        else return null;
-    }
 
     private float calculateSquareDistance(int x, Color[] c)
     {
@@ -76,10 +63,11 @@ public class False3D extends Render {
             float[][] p2pLine = new float[][]{new float[]{line[0], line[1]}, new float[]{line[0], line[1]}};
             p2pLine[1][0]+=line[2];
             p2pLine[1][1]+=line[3];
-            float[] intersect = getCollisionPoint(p2pLine[0][0], p2pLine[0][1],
+            Collision2D col = Collision2D.LineLine(p2pLine[0][0], p2pLine[0][1],
                     p2pLine[1][0], p2pLine[1][1], ray[0][0], ray[0][1],
                     ray[1][0],ray[1][1]);
-            if(intersect==null) continue;
+            if(!col.getCollisionOccurred()) continue;
+            float[] intersect = col.getIntersection();
             float thisDistanceSquared = (intersect[0]-player.getPosition()[0])*(intersect[0]-player.getPosition()[0])
                     +(intersect[1]-player.getPosition()[1])*(intersect[1]-player.getPosition()[1]);
             if(thisDistanceSquared < outputSquareDistance) {
