@@ -9,7 +9,7 @@ import mobac.MoBacPlugin;
 
 import java.util.List;
 
-public class Default extends MoBacPlugin implements IMoBacPlugin {
+public class Default3D extends MoBacPlugin implements IMoBacPlugin {
 
     public void Run()
     {
@@ -30,16 +30,14 @@ public class Default extends MoBacPlugin implements IMoBacPlugin {
                         System.out.println("Collision Occurred!");
                         float[] intersection = col.getIntersection();
                         float[] toPlayer = new float[] {playerPos[0]-intersection[0], playerPos[1]-intersection[1]};
-                        //player.transform(toPlayer[0], toPlayer[1]);
-                        r.drawOval((int)intersection[0], (int)intersection[1], 2, 2);
+                        player.transform(toPlayer[0], toPlayer[1]);
                     }
                 }
             }
 
             @Override
             public void run() {
-                Render r = new Map("level1");
-                //Render r = new False3D("level1");
+                Render r = new False3D("level1");
                 r.setVisible(true);
                 PlayerController pc = new PlayerController(r.getPlayer(), r);
                 r.addPerFrameAction(()->pc.tick());
