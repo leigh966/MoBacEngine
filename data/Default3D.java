@@ -7,8 +7,6 @@ import data.libs.abstract_classes.Render;
 import mobac.IMoBacPlugin;
 import mobac.MoBacPlugin;
 
-import java.util.List;
-
 public class Default3D extends MoBacPlugin implements IMoBacPlugin {
 
     public void Run()
@@ -20,8 +18,8 @@ public class Default3D extends MoBacPlugin implements IMoBacPlugin {
             public void run() {
                 Render r = new False3D("level1");
                 r.setVisible(true);
-                PlayerController pc = new PlayerController(r.getPlayer(), r);
-                r.addPerFrameAction(()->pc.tick());
+                PlayerController pc = new PlayerController(r);
+                r.addPerFrameAction(()->pc.useStandardEffect());
                 r.addPerFrameAction(()->CollisionResolution.PlayerLine(r));
             }
         });

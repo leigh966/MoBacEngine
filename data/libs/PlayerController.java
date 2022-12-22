@@ -1,6 +1,9 @@
 package data.libs;
 
+import data.libs.abstract_classes.Render;
+
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -14,10 +17,16 @@ public class PlayerController {
     public static float rotationSpeed;
     String keysDown = "";
 
-    public PlayerController(Player playerToControl, JFrame frame)
+    public PlayerController(Render frame)
     {
-        player = playerToControl;
+        player = frame.getPlayer();
         configValues = readConfig("controls");
+        loadSensitivity();
+        startListening(frame);
+    }
+
+    private void loadSensitivity()
+    {
         try {
             String readSensitivity = configValues.get("sensitivity");
             if(readSensitivity==null) throw new NumberFormatException("sensitivity not set in config");
@@ -28,6 +37,10 @@ public class PlayerController {
             System.out.println("Failed to read sensitivity from config! Defaulting to 0.2f.");
             rotationSpeed = 0.2f;
         }
+    }
+
+    private void startListening(JFrame frame)
+    {
         frame.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -70,7 +83,7 @@ public class PlayerController {
         player.transform(newVector[0], newVector[1]);
     }
 
-    public void tick()
+    public void useStandardEffect()
     {
         for(int i = 0; i < keysDown.length(); i++)
         {
