@@ -56,7 +56,7 @@ public class Collision2D
         float min = lineLen-BUFFER, max = lineLen+BUFFER;
         if(d1+d2>=min && d1+d2<=max)
         {
-            float[] vector = new float[]{(lineX2-lineX1)/lineLen, (lineY2-lineY1)/lineLen};
+            float[] vector = MoMath.normalize(lineX2-lineX1, lineY2-lineY1);
             return new Collision2D(true, vector[0]*d1, vector[1]*d1);
         }
         return new Collision2D();
