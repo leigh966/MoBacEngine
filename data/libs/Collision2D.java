@@ -1,9 +1,6 @@
 package data.libs;
 
-import java.awt.*;
-
 import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 
 public class Collision2D
 {
@@ -48,18 +45,13 @@ public class Collision2D
         else return new Collision2D();
     }
 
-    private static double calcLineLength(float x1, float y1, float x2, float y2)
-    {
-        float distX = x1 - x2;
-        float distY = y1 - y2;
-        return sqrt( (distX*distX) + (distY*distY) );
-    }
+
 
     public static Collision2D LinePoint(float pointX, float pointY, float lineX1, float lineY1, float lineX2, float lineY2)
     {
-        float lineLen = (float)calcLineLength(lineX1, lineY1, lineX2, lineY2);
-        float d1 = (float)calcLineLength(pointX, pointY, lineX1, lineY1);
-        float d2 = (float)calcLineLength(pointX, pointY, lineX2, lineY2);
+        float lineLen = MoMath.calculatePointDistance(lineX1, lineY1, lineX2, lineY2);
+        float d1 = MoMath.calculatePointDistance(pointX, pointY, lineX1, lineY1);
+        float d2 = MoMath.calculatePointDistance(pointX, pointY, lineX2, lineY2);
         final float BUFFER = 0.1f; // floats aren't accurate so check within this distance
         if(d1+d2>=lineLen-BUFFER && d1+d2<=lineLen+BUFFER)
         {
@@ -72,7 +64,7 @@ public class Collision2D
 
     public static Collision2D CircleLine(float circleX, float circleY, float circleRadius, float lineX1, float lineY1, float lineX2, float lineY2)
     {
-        float len = (float)calcLineLength(lineX1, lineY1, lineX2, lineY2);
+        float len = MoMath.calculatePointDistance(lineX1, lineY1, lineX2, lineY2);
         float dot = ( ((circleX-lineX1)*(lineX2-lineX1)) + ((circleY-lineY1)*(lineY2-lineY1)) ) / (float)pow(len,2);
         float closestX = lineX1 + (dot * (lineX2-lineX1));
         float closestY = lineY1 + (dot * (lineY2-lineY1));
