@@ -21,6 +21,12 @@ public abstract class Render extends JFrame {
 
     List<Runnable> actions;
 
+    public List<Float[]> getLines()
+    {
+        return new LinkedList<>(lines);
+    }
+
+
     public Render(String windowName, String levelName)
     {
         super(windowName);
@@ -101,6 +107,19 @@ public abstract class Render extends JFrame {
         g2d.drawString(String.format("%,.2f", framerate), 20, 50);
     }
 
+    List<Integer[]> ovals = new LinkedList<>();
+    public void drawOval(int x, int y, int w, int h)
+    {
+        ovals.add(new Integer[]{x,y,w,h});
+    }
+
+    protected void drawOvals(Graphics2D g2d)
+    {
+        for(Integer[] oval : ovals)
+        {
+            g2d.drawOval(oval[0],oval[1],oval[2],oval[3]);
+        }
+    }
 
     protected void draw(Graphics2D g2d)
     {
@@ -111,6 +130,7 @@ public abstract class Render extends JFrame {
         g2d.setBackground(Color.white);
         elapsedTime = System.currentTimeMillis() - frameStart;
         frameStart = System.currentTimeMillis();
+        drawOvals(g2d);
         if(showFps) drawFps(g2d);
     }
 

@@ -1,5 +1,10 @@
 package data.libs;
 
+import java.awt.*;
+
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 public class Collision2D
 {
     private boolean collisionOccurred;
@@ -42,4 +47,46 @@ public class Collision2D
         }
         else return new Collision2D();
     }
+
+    private static double calcLineLength(float x1, float y1, float x2, float y2)
+    {
+        float distX = x1 - x2;
+        float distY = y1 - y2;
+        return sqrt( (distX*distX) + (distY*distY) );
+    }
+
+    public static Collision2D LinePoint(float pointX, float pointY, float lineX1, float lineY1, float lineX2, float lineY2)
+    {
+        float lineLen = (float)calcLineLength(lineX1, lineY1, lineX2, lineY2);
+        float d1 = (float)calcLineLength(pointX, pointY, lineX1, lineY1);
+        float d2 = (float)calcLineLength(pointX, pointY, lineX2, lineY2);
+        final float BUFFER = 0.1f; // floats aren't accurate so check within this distance
+        if(d1+d2>=lineLen-BUFFER && d1+d2<=lineLen+BUFFER)
+        {
+            float[] vector = new float[]{(lineX2-lineX1)/lineLen, (lineY2-lineY1)/lineLen};
+            return new Collision2D(true, vector[0]*d1, vector[1]*d1);
+        }
+        return new Collision2D();
+    }
+
+
+    public static Collision2D CircleLine(float circleX, float circleY, float circleRadius, float lineX1, float lineY1, float lineX2, float lineY2)
+    {
+        float len = (float)calcLineLength(lineX1, lineY1, lineX2, lineY2);
+        float dot = ( ((circleX-lineX1)*(lineX2-lineX1)) + ((circleY-lineY1)*(lineY2-lineY1)) ) / (float)pow(len,2);
+        float closestX = lineX1 + (dot * (lineX2-lineX1));
+        float closestY = lineY1 + (dot * (lineY2-lineY1));
+        Collision2D onSegmentCollision = LinePoint(closestX,closestY,lineX1,lineY1,lineX2,lineY2);
+        boolean onSegment = onSegmentCollision.getCollisionOccurred();
+        if (!onSegment) return onSegmentCollision;
+        float distX = closestX - circleX;
+        float distY = closestY - circleY;
+        float squareDistance = (distX*distX) + (distY*distY);
+        if(squareDistance <= circleRadius*circleRadius)
+        {
+            return new Collision2D(true, closestX, closestY);
+        }
+        return new Collision2D();
+    }
+
 }
