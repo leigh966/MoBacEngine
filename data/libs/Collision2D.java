@@ -7,16 +7,12 @@ public class Collision2D
     private boolean collisionOccurred;
     private float[] intersection;
 
-    public boolean getCollisionOccurred()
-    {
-        return collisionOccurred;
-    }
-
-    public float[] getIntersection()
-    {
-        return intersection.clone();
-    }
-
+    /**
+     *
+     * @param ocurred Boolean representing whether the collision took place
+     * @param x The x coordinate at which the collision took place
+     * @param y The y coordinate at which the collision took place
+     */
     Collision2D(boolean ocurred, float x, float y)
     {
         collisionOccurred = ocurred;
@@ -29,7 +25,37 @@ public class Collision2D
         intersection = null;
     }
 
+    /**
+     *
+     * @return Boolean representing whether the collision took place
+     */
+    public boolean getCollisionOccurred()
+    {
+        return collisionOccurred;
+    }
 
+    /**
+     * Get the point at which the collision took place
+     * @return Float array representing the point that this collision took place such that arr[0] is the x coordinate
+     * and arr[1] is the y coordinate
+     */
+    public float[] getIntersection()
+    {
+        return intersection.clone();
+    }
+
+    /**
+     * Detect a collision between 2 lines
+     * @param x1 Line segment 1, point 1, x coordinate
+     * @param y1 Line segment 1, point 1, y coordinate
+     * @param x2 Line segment 1, point 2, x coordinate
+     * @param y2 Line segment 1, point 2, y coordinate
+     * @param x3 Line segment 2, point 1, x coordinate
+     * @param y3 Line segment 2, point 1, y coordinate
+     * @param x4 Line segment 2, point 2, x coordinate
+     * @param y4 Line segment 2, point 2, y coordinate
+     * @return Collision2D object representing where and whether a collision took place
+     */
     public static Collision2D LineLine(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
         // calculate the distance to intersection point
         float denominator = ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
@@ -46,7 +72,16 @@ public class Collision2D
     }
 
 
-
+    /**
+     * Detect a collision between a line and a point
+     * @param pointX The x coordinate of the point
+     * @param pointY The y coordinate of the point
+     * @param lineX1 The x coordinate of point 1 of the line
+     * @param lineY1 The y coordinate of point 1 of the line
+     * @param lineX2 The x coordinate of point 2 of the line
+     * @param lineY2 The y coordinate of point 2 of the line
+     * @return Collision2D object representing where and whether a collision took place
+     */
     public static Collision2D LinePoint(float pointX, float pointY, float lineX1, float lineY1, float lineX2, float lineY2)
     {
         float lineLen = MoMath.calculatePointDistance(lineX1, lineY1, lineX2, lineY2);
@@ -63,6 +98,18 @@ public class Collision2D
     }
 
 
+    /**
+     * Detect a collision between a circle and a line
+     * @param circleX The x coordinate of the centre of the circle
+     * @param circleY The y coordinate of the centre of the circle
+     * @param circleRadius The radius of the circle
+     * @param lineX1 The x coordinate of point 1 of the line segment
+     * @param lineY1 The y coordinate of point 1 of the line segment
+     * @param lineX2 The x coordinate of point 2 of the line segment
+     * @param lineY2 The y coordinate of point 2 of the line segment
+     *
+     * @return Collision2D object representing where and whether a collision took place
+     */
     public static Collision2D CircleLine(float circleX, float circleY, float circleRadius, float lineX1, float lineY1, float lineX2, float lineY2)
     {
         float len = MoMath.calculatePointDistance(lineX1, lineY1, lineX2, lineY2);
