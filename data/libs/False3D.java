@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class False3D extends Render {
 
-    int fov;
+    public int fov;
     float viewDistance = 200f;
     public False3D(String levelName)
     {
@@ -25,11 +25,11 @@ public class False3D extends Render {
         }
     }
 
+    private float thetaGradient;
     private float getPixelTheta(int x)
     {
         float relativeToCenter = x-(getWidth()/2);
-        float gradient = (float)fov/(float)getWidth();
-        float theta = relativeToCenter*gradient;
+        float theta = relativeToCenter*thetaGradient;
         return theta;
     }
 
@@ -53,11 +53,10 @@ public class False3D extends Render {
 
     private float calculateSquareDistance(int x, Color[] c)
     {
-
         float theta = getPixelTheta(x);
         float[] vector = getVector(theta);
         float[][] ray = getRay(vector);
-        float outputSquareDistance = 1000000f;
+        float outputSquareDistance = 20000f;
         for(Float[] line : lines)
         {
             float[][] p2pLine = new float[][]{new float[]{line[0], line[1]}, new float[]{line[0], line[1]}};
@@ -88,6 +87,7 @@ public class False3D extends Render {
     protected void draw(Graphics2D g2d)
     {
         super.draw(g2d);
+        thetaGradient = (float)fov/(float)getWidth(); // Update the gradient incase the fov has been changed
         for(int i = 0; i < getWidth(); i++)
         {
             Color[] drawColor = new Color[]{Color.black};
