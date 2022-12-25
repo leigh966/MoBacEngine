@@ -65,7 +65,9 @@ public class PlayerController {
 
     private boolean isKeyFor(char key, String action)
     {
-        return key == configValues.get(action).charAt(0);
+        String configKeyString = configValues.get(action);
+        if(configKeyString==null) return false;
+        return key == configKeyString.charAt(0);
     }
 
     public void rotate(float angle)
