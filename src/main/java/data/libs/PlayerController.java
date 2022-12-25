@@ -10,13 +10,23 @@ import java.util.HashMap;
 
 import static data.libs.ConfigReader.readConfig;
 
+/**
+ * Class to represent the statndard player controller provide extended movement and interaction functionality to the player
+ * @author Leigh Hurley (ItsTheNikolai)
+ */
 public class PlayerController {
     protected Player player;
     protected HashMap<String, String> configValues;
+    /** The distance that the player moves per frame */
     public static float movementSpeed = 0.1f;
+    /** The angle that the player rotates per frame */
     public static float rotationSpeed;
-    String keysDown = "";
+    protected String keysDown = "";
 
+    /**
+     *
+     * @param frame The Render object currently rendering the scene
+     */
     public PlayerController(Render frame)
     {
         player = frame.getPlayer();
@@ -25,6 +35,10 @@ public class PlayerController {
         startListening(frame);
     }
 
+    /**
+     * Attempt to load the sensitivity (rotationSpeed) from controls.config. If it is not present in the config,
+     * default to 0.2f
+     */
     private void loadSensitivity()
     {
         try {
@@ -39,6 +53,10 @@ public class PlayerController {
         }
     }
 
+    /**
+     * Add key listeners to the scene for this object to respond to
+     * @param frame The Render object currently rendering the scene
+     */
     private void startListening(JFrame frame)
     {
         frame.addKeyListener(new KeyListener() {
@@ -63,6 +81,12 @@ public class PlayerController {
         });
     }
 
+    /**
+     * Figure out whether a given key corresponds to a given action in controls.config
+     * @param key The key to check against the action
+     * @param action The action to check against the key
+     * @return Boolean value representing whether or not the key corresponds to the action
+     */
     private boolean isKeyFor(char key, String action)
     {
         String configKeyString = configValues.get(action);
@@ -70,11 +94,19 @@ public class PlayerController {
         return key == configKeyString.charAt(0);
     }
 
+    /**
+     * Adjust the players current angle by an angle delta
+     * @param angle The delta angle for the player's rotation (how much it should change)
+     */
     public void rotate(float angle)
     {
         player.rotation += angle;
     }
 
+    /**
+     * Move the player in the world in the direction of a given local-space vector but altered to have a magnitude of movementSpeed
+     * @param vector A vector in the local space of the player to move
+     */
     public void move(float[] vector)
     {
         float[] playerFacing = player.getFacingVector();
@@ -85,6 +117,11 @@ public class PlayerController {
         player.transform(newVector[0], newVector[1]);
     }
 
+
+    /**
+     * Add this method as a per-frame action to your Render object to use the standard controls of moving forwards,
+     * backwards, right, left and rotating clockwise or anticlockwise
+     */
     public void useStandardEffect()
     {
         for(int i = 0; i < keysDown.length(); i++)
