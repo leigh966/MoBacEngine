@@ -11,7 +11,7 @@ import java.util.HashMap;
 import static data.libs.ConfigReader.readConfig;
 
 /**
- * Class to represent the statndard player controller provide extended movement and interaction functionality to the player
+ * Class to represent the standard player controller provide extended movement and interaction functionality to the player
  * @author Leigh Hurley (ItsTheNikolai)
  */
 public class PlayerController {
