@@ -20,7 +20,7 @@ public class Default2D extends MoBacPlugin implements IMoBacPlugin {
                 r.setVisible(true);
                 PlayerController pc = new PlayerController(r);
                 r.addPerFrameAction(()->pc.useStandardEffect());
-                r.addPerFrameAction(()->CollisionResolution.PlayerLine(r));
+                r.addPerFrameAction(()-> CollisionResolution2D.PlayerLine(r));
             }
         });
     }

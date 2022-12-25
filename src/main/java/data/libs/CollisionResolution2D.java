@@ -4,8 +4,18 @@ import data.libs.abstract_classes.Render;
 
 import java.util.List;
 
-public class CollisionResolution {
+/**
+ * A class of static methods that can be added as per-frame actions to a Render object to provide collision resolution
+ * in 2-dimensional/false 3d worlds
+ */
+public class CollisionResolution2D {
+    /** The radius of the player's circle collider */
     public static float playerRadius = 1f;
+
+    /**
+     * Resolve collisions between the player and walls (lines)
+     * @param r The render object to apply this effect to
+     */
     public static void PlayerLine(Render r)
     {
         Player player = r.getPlayer();
