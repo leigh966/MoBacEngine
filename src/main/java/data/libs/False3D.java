@@ -6,14 +6,24 @@ import java.awt.*;
 
 public class False3D extends Render {
 
+    /**  The field of view of the camera in degrees */
     public int fov;
-    float viewDistance = 200f;
+    /** How far away an object can be before it stops being visible to the player */
+    public float viewDistance = 200f;
+
+    /**
+     *
+     * @param levelName The name of the level to load such that {levelName}.modat is the level data file you wish to read
+     */
     public False3D(String levelName)
     {
         super("First Person Mode", levelName);
         loadFov();
     }
 
+    /**
+     * Attempt to load the fov value from the config values, default to 100 if this fails
+     */
     private void loadFov()
     {
         try {
@@ -26,6 +36,13 @@ public class False3D extends Render {
     }
 
     private float thetaGradient;
+
+    /**
+     * Calculate the angle needed for raycasting
+     * @param x X coordinate of the line we're checking
+     * @return The angle relative to the players pointing vector we need to raycast at in order to produce the desired
+     * fov
+     */
     private float getPixelTheta(int x)
     {
         float relativeToCenter = x-(getWidth()/2);
