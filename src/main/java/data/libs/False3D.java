@@ -3,6 +3,9 @@ package data.libs;
 import data.libs.abstract_classes.Render;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 
 public class False3D extends Render {
 
@@ -101,20 +104,50 @@ public class False3D extends Render {
         return outputSquareDistance;
     }
 
+    BufferedImage imageBuffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+
+
     protected void draw(Graphics2D g2d)
     {
-        super.draw(g2d);
-        thetaGradient = (float)fov/(float)getWidth(); // Update the gradient incase the fov has been changed
-        for(int i = 0; i < getWidth(); i++)
+        for(IPostProcessing pp : postProcesses)
         {
-            Color[] drawColor = new Color[]{Color.black};
-            float squareDistance = calculateSquareDistance(i, drawColor);
-            g2d.setColor(drawColor[0]);
-            double distance = Math.sqrt(squareDistance);
-            double size = getHeight()/distance;
-            int mid = getHeight()/2;
-            g2d.drawLine(i, mid-(int)size/2, i, mid+(int)size/2);
+            pp.preRender(this);
         }
+
+
+        Graphics bufferedGraphics = imageBuffer.getGraphics();
+        bufferedGraphics.setColor(Color.WHITE);
+        bufferedGraphics.fill3DRect(0, 0, imageBuffer.getWidth(), imageBuffer.getHeight(), false);
+
+
+        thetaGradient = (float)fov/(float)imageBuffer.getWidth(); // Update the gradient incase the fov has been changed
+
+
+            for (int i = 0; i < imageBuffer.getWidth(); i++) {
+                Color[] drawColor = new Color[]{Color.black};
+                float squareDistance = calculateSquareDistance(i, drawColor);
+                bufferedGraphics.setColor(drawColor[0]);
+                double distance = Math.sqrt(squareDistance);
+                double size = imageBuffer.getHeight() / distance;
+                int mid = imageBuffer.getHeight() / 2;
+                bufferedGraphics.drawLine(i, mid - (int) size / 2, i, mid + (int) size / 2);
+            }
+
+
+        //Post-processing
+        for(IPostProcessing pp : postProcesses)
+        {
+            pp.useEffect(imageBuffer);
+        }
+
+        g2d.drawImage(imageBuffer, 0, 0, null);
+
+        super.draw(g2d);
+    }
+
+    public void setBufferResolution(int width, int height)
+    {
+        imageBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     }
 
 }

@@ -1,5 +1,6 @@
 package data.libs.abstract_classes;
 
+import data.libs.IPostProcessing;
 import data.libs.Player;
 
 import javax.swing.*;
@@ -29,6 +30,14 @@ public abstract class Render extends JFrame {
 
     List<Runnable> actions;
 
+    public RenderingHints hints =new RenderingHints(RenderingHints.KEY_RENDERING,
+            RenderingHints.VALUE_RENDER_QUALITY);
+
+
+    public String getConfigValue(String key)
+    {
+        return configValues.get(key);
+    }
 
     /**
      *
@@ -47,6 +56,7 @@ public abstract class Render extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         loadLevel(levelName);
+        hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
     }
 
     /** Get a copy of the list of lines (representing walls) that have been read in from the level data
@@ -211,8 +221,8 @@ public abstract class Render extends JFrame {
         draw(g2d);
         Graphics2D g2dComponent = (Graphics2D) g;
         g2dComponent.drawImage(bufferedImage, null, 0, 0);
-
         repaint();
+        ((Graphics2D) g).setRenderingHints(hints);
     }
 
     /** Add an action to be run every frame
@@ -223,5 +233,8 @@ public abstract class Render extends JFrame {
     {
         actions.add(r);
     }
+
+    protected List<IPostProcessing> postProcesses = new ArrayList<>();
+    public void addPostProcessing(IPostProcessing pp) { postProcesses.add(pp); }
 
 }

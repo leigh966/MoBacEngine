@@ -21,6 +21,7 @@ public class Default3D extends MoBacPlugin implements IMoBacPlugin {
                 PlayerController pc = new PlayerController(r);
                 r.addPerFrameAction(()->pc.useStandardEffect());
                 r.addPerFrameAction(()-> CollisionResolution2D.PlayerLine(r));
+                r.addPostProcessing(new SuperSampling());
             }
         });
     }
