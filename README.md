@@ -4,11 +4,12 @@
 The idea of this project is to make an extensible, customizable, open-source game engine for making 2d and 3d games. The primary focus was to make a game engine for Java that would render faux-3d graphics simililar to the original Doom and Quake games
 
 ## Project Structure
+The project comes with an example project already set up so that you can see the basic idea of how level definition and plugin creation are done.
 ### Project Root
 - / - Open this directory in your editor such as IntelliJ to start working on the project
 - /target - Where built materials will be stored, you can also change your load order here to change what class(es) to run when the JAR is launched
 - /src - Where all java source code is stored, this is the bulk of what you will be editting
-- 
+
 ### Main Java Source Code
 Path: Project Root/main/java
 - /data - This is where any code for a project you are creating will be stored, for most users this will be the only directory with any code that you add/change
